@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="window_types">
+        <item>TYPE_PHONE</item>
+        <item>TYPE_SYSTEM_ALERT</item>
+        <item>TYPE_TOAST</item>
+        <item>TYPE_SYSTEM_ERROR</item>
+    </string-array>
+</resources>

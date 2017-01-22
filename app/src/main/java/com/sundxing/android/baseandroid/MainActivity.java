@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.sundxing.android.baseandroid.drawable.VectorTestActivity;
 import com.sundxing.android.baseandroid.jump.ShowPopWindowActivity;
+import com.sundxing.android.baseandroid.permisson.PermissionCheckActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,4 +27,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, ShowPopWindowActivity.class));
     }
 
+    public void startVector(View view) {
+        startActivity(new Intent(this, VectorTestActivity.class));
+    }
+
+    public void startDrawOverlay(View view) {
+        startActivity(new Intent(this, PermissionCheckActivity.class));
+    }
 }

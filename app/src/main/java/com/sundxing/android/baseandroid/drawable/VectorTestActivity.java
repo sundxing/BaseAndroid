@@ -1,0 +1,65 @@
+package com.sundxing.android.baseandroid.drawable;
+
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.sundxing.android.baseandroid.R;
+
+/**
+ * Created by sundxing on 17/1/18.
+ */
+
+public class VectorTestActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Drawable drawableClickBlue = VectorDrawableCompat.create(getResources(), R.drawable.vector_hint_color, null);
+        View textView = new ImageView(this);
+        AppCompatImageView appCompatImageView = new AppCompatImageView(this);
+        try {
+            textView.setBackgroundDrawable(drawableClickBlue);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        } catch (Exception e) {
+            // 4.3 crash : android.content.res.Resources$NotFoundException
+            // add 'vectorDrawables.useSupportLibrary = true' configures in build.gradle
+            e.printStackTrace();
+            try {
+                textView.setBackgroundDrawable(drawableClickBlue);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+                appCompatImageView.setImageResource(R.drawable.ic_android_black_24dp);
+            }
+        }
+        TextView tv = new TextView(this);
+        tv.setText("Draw Left & Top & Bottom");
+        // This drawable use new instance in different views.
+        // tv.setCompoundDrawablesWithIntrinsicBounds(null, drawableClickBlue, null, null);
+        tv.setCompoundDrawablesWithIntrinsicBounds(null,
+                VectorDrawableCompat.create(getResources(), R.drawable.vector_hint_color, null), null,
+                drawableClickBlue);
+        tv.setClickable(true);
+
+        ScrollView container = new ScrollView(this);
+        LinearLayout l = new LinearLayout(this);
+        l.setOrientation(LinearLayout.VERTICAL);
+        l.addView(textView, 60, 60);
+        l.addView(tv, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        container.addView(l);
+        setContentView(l);
+    }
+}

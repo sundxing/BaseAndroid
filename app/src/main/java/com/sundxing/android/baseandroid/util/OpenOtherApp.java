@@ -1,11 +1,16 @@
-package com.sundxing.android.baseandroid.jump;
+package com.sundxing.android.baseandroid.util;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -65,5 +70,20 @@ public class OpenOtherApp {
                     Uri.parse("https://play.google.com/store/apps/details?id="+appId));
             context.startActivity(webIntent);
         }
+    }
+
+
+    /**
+     * 启动开启 Draw over other application
+     * @param context
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    public static void requestDrawOverLays(@NonNull Context context) {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(intent);
+
     }
 }

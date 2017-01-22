@@ -25,7 +25,16 @@
             android:layout_height="wrap_content"
             android:text="PopWindow"
             android:onClick="startPopupWindow"/>
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vector Test"
+            android:onClick="startVector"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Draw overlay"
+            android:onClick="startDrawOverlay"/>
     </LinearLayout>
 
 </ScrollView>

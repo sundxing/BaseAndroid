@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/click_perm_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Draw overlay:"/>
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/tv_perm_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ok"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_show_window"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showWindow"
+        android:text="Show"/>
+    <Spinner
+        android:id="@+id/spanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/window_types"/>
+
+</LinearLayout>
