@@ -4,7 +4,7 @@
     android:height="24dp"
     android:viewportWidth="24.0"
     android:tint="@color/selector_button_bg"
-    android:tintMode="src_in"
+    android:tintMode="src_over"
     android:viewportHeight="24.0">
     <path
         android:fillColor="@color/tint_ori"
