@@ -20,6 +20,15 @@
         <activity android:name=".jump.ShowPopWindowActivity" android:process=":new"/>
         <activity android:name=".drawable.VectorTestActivity" />
         <activity android:name=".permisson.PermissionCheckActivity"/>
+        
+        <receiver android:name=".receiver.ScureInnerReceiver"
+            android:process=":test"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.sundxing.android.baseandroid.START_RECEIVER"/>
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>

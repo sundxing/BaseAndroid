@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, getApplicationContext().toString());
         Log.d(TAG, getBaseContext().toString());
+
+        sendBroadcast(new Intent("com.sundxing.android.baseandroid.START_RECEIVER"));
     }
 
     public void startPopupWindow(View view) {
