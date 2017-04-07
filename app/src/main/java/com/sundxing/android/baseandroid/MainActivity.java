@@ -9,6 +9,7 @@ import android.view.View;
 import com.sundxing.android.baseandroid.drawable.VectorTestActivity;
 import com.sundxing.android.baseandroid.jump.ShowPopWindowActivity;
 import com.sundxing.android.baseandroid.permisson.PermissionCheckActivity;
+import com.sundxing.android.baseandroid.view.FontMetricActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,5 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void startDrawOverlay(View view) {
         startActivity(new Intent(this, PermissionCheckActivity.class));
+    }
+
+    public void startFontMetrics(View view) {
+        startActivity(new Intent(this, FontMetricActivity.class));
     }
 }

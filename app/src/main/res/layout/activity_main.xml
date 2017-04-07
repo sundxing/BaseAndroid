@@ -35,6 +35,11 @@
             android:layout_height="wrap_content"
             android:text="Draw overlay"
             android:onClick="startDrawOverlay"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Font Metrics"
+            android:onClick="startFontMetrics"/>
     </LinearLayout>
 
 </ScrollView>

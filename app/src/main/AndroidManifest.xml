@@ -20,7 +20,7 @@
         <activity android:name=".jump.ShowPopWindowActivity" android:process=":new"/>
         <activity android:name=".drawable.VectorTestActivity" />
         <activity android:name=".permisson.PermissionCheckActivity"/>
-        
+        <activity android:name=".view.FontMetricActivity"/>
         <receiver android:name=".receiver.ScureInnerReceiver"
             android:process=":test"
             android:exported="false">
