@@ -1,36 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
             android:id="@+id/click_perm_overlay"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Draw overlay:" />
+
+            <TextView
+                android:id="@+id/tv_perm_overlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ok"
+                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_show_window"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Draw overlay:"/>
+            android:onClick="showWindow"
+            android:text="Show" />
+
+        <Spinner
+            android:id="@+id/spanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/window_types" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WindowManager.LayoutParams.flags:"/>
+            <Button
+                android:id="@+id/window_flags_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"/>
+        </LinearLayout>
         <TextView
-            android:textColor="@color/colorPrimaryDark"
-            android:id="@+id/tv_perm_overlay"
+            android:id="@+id/window_flags"
+            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ok"/>
+            android:textColor="@color/tint_ori"
+            android:text="XX"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:text="View.setSystemUiVisibility:" />
+
+            <Button
+                android:id="@+id/view_flags_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/view_flags"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tint_ori"
+            android:text="XX"/>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_show_window"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showWindow"
-        android:text="Show"/>
-    <Spinner
-        android:id="@+id/spanner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/window_types"/>
-
-</LinearLayout>
+</ScrollView>
