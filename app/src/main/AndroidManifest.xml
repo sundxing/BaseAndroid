@@ -21,6 +21,7 @@
         <activity android:name=".drawable.VectorTestActivity" />
         <activity android:name=".permisson.PermissionCheckActivity"/>
         <activity android:name=".view.FontMetricActivity"/>
+        <activity android:name=".anim.NoDrawCallActivity" />
         <receiver android:name=".receiver.ScureInnerReceiver"
             android:process=":test"
             android:exported="false">
@@ -29,6 +30,9 @@
             </intent-filter>
 
         </receiver>
+
+        <!--FOR TEST-->
+        <service android:name=".test.DemoService"/>
     </application>
 
 </manifest>
