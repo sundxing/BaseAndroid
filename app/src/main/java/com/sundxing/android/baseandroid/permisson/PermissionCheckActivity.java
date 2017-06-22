@@ -74,6 +74,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_permisson_check);
 
+        setTitle("OverLay Window");
         textView = (TextView) findViewById(R.id.tv_perm_overlay);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         rootView = new TextView(this);
