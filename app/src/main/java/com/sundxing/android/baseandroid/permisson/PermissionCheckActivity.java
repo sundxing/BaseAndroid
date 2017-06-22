@@ -3,17 +3,20 @@ package com.sundxing.android.baseandroid.permisson;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -35,7 +38,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
     private TextView textView;
     private int mType;
     private WindowManager windowManager;
-    private TextView rootView;
+    private LinearLayout mRootView;
     private TextView viewFlags;
     private TextView windowFlags;
 
@@ -44,6 +47,12 @@ public class PermissionCheckActivity extends AppCompatActivity {
 
     private static Map<CharSequence, Integer> sMapViewFlag = new TreeMap<>();
     private static Map<CharSequence, Integer> sWindowViewFlag = new TreeMap<>();
+
+    @ColorInt public static final int RED         = 0xFFFF0000;
+    @ColorInt public static final int GREEN       = 0xFF00FF00;
+    @ColorInt public static final int BLUE        = 0xFF0000FF;
+    @ColorInt public static final int YELLOW      = 0xFFFFFF00;
+    private static int[] sColorList = new int[] {RED, GREEN, BLUE, YELLOW};
 
     static {
         sMapViewFlag.put("SYSTEM_UI_FLAG_VISIBLE", View.SYSTEM_UI_FLAG_VISIBLE);
@@ -68,6 +77,9 @@ public class PermissionCheckActivity extends AppCompatActivity {
 
 
     }
+
+    private int seletedColorIndex;
+
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -77,7 +89,9 @@ public class PermissionCheckActivity extends AppCompatActivity {
         setTitle("OverLay Window");
         textView = (TextView) findViewById(R.id.tv_perm_overlay);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        rootView = new TextView(this);
+
+        mRootView = new LinearLayout(this);
+        mRootView.setOrientation(LinearLayout.VERTICAL);
 
         viewFlags = (TextView)findViewById(R.id.view_flags);
         findViewById(R.id.view_flags_add).setOnClickListener(new View.OnClickListener() {
@@ -198,13 +212,28 @@ public class PermissionCheckActivity extends AppCompatActivity {
     }
 
     public void showWindow(View view) {
-        rootView.setText("Click to change color");
-        rootView.setTextSize(90);
-        rootView.setBackgroundColor(Color.RED);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        mRootView.removeAllViewsInLayout();
+        TextView textView = new TextView(this);
+        textView.setText("Click to change color");
+        textView.setTextSize(90);
+        mRootView.addView(textView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        Button button = new Button(this);
+        button.setText("Exit");
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rootView.setBackgroundColor(Color.BLUE);
+                dismiss();
+            }
+        });
+        mRootView.addView(button);
+
+        seletedColorIndex = 0;
+        mRootView.setBackgroundColor(sColorList[seletedColorIndex]);
+        mRootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRootView.setBackgroundColor(getNextColor());
             }
         });
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(mType);
@@ -212,16 +241,21 @@ public class PermissionCheckActivity extends AppCompatActivity {
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.flags |= getWindowFlags();
         layoutParams.gravity = Gravity.CENTER;
-        rootView.postDelayed(new Runnable() {
+        mRootView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 dismiss();
             }
-        }, 5000);
+        }, 10000);
         int uiFlag = getViewFlags();
-        rootView.setSystemUiVisibility(uiFlag);
-        windowManager.addView(rootView, layoutParams);
+        mRootView.setSystemUiVisibility(uiFlag);
+        windowManager.addView(mRootView, layoutParams);
 
+    }
+
+    private int getNextColor() {
+        int len = sColorList.length;
+        return sColorList[++seletedColorIndex % len];
     }
 
     private int getViewFlags() {
@@ -241,7 +275,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
 
     private void dismiss() {
         try {
-            windowManager.removeView(rootView);
+            windowManager.removeView(mRootView);
         } catch (Exception e) {
             e.printStackTrace();
         }
