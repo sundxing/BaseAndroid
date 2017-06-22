@@ -35,7 +35,12 @@
             android:layout_height="wrap_content"
             android:onClick="showWindow"
             android:text="Show" />
-
+        <TextView
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WindowManager.LayoutParams.type:"/>
         <Spinner
             android:id="@+id/spanner"
             android:layout_width="wrap_content"
