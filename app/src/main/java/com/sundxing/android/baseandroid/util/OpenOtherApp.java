@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import java.util.List;
 
@@ -85,5 +86,37 @@ public class OpenOtherApp {
         }
         context.startActivity(intent);
 
+    }
+
+    /**
+     *  see https://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
+     *
+     * @param mContext
+     * @param addresses
+     * @param subject
+     * @param body
+     */
+    public static void sentEmail(Context mContext, String[] addresses, String subject, String body) {
+
+        try {
+            Intent sendIntentGmail = new Intent(Intent.ACTION_VIEW);
+            sendIntentGmail.setType("plain/text");
+            sendIntentGmail.setData(Uri.parse(TextUtils.join(",", addresses)));
+            sendIntentGmail.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
+            sendIntentGmail.putExtra(Intent.EXTRA_EMAIL, addresses);
+            if (subject != null) sendIntentGmail.putExtra(Intent.EXTRA_SUBJECT, subject);
+            if (body != null) sendIntentGmail.putExtra(Intent.EXTRA_TEXT, body);
+            mContext.startActivity(sendIntentGmail);
+        } catch (Exception e) {
+            //When Gmail App is not installed or disable
+            Intent sendIntentIfGmailFail = new Intent(Intent.ACTION_SENDTO);
+            sendIntentIfGmailFail.setData(Uri.parse("mailto:")); // only email apps should handle this
+            sendIntentIfGmailFail.putExtra(Intent.EXTRA_EMAIL, addresses);
+            if (subject != null) sendIntentIfGmailFail.putExtra(Intent.EXTRA_SUBJECT, subject);
+            if (body != null) sendIntentIfGmailFail.putExtra(Intent.EXTRA_TEXT, body);
+            if (sendIntentIfGmailFail.resolveActivity(mContext.getPackageManager()) != null) {
+                mContext.startActivity(sendIntentIfGmailFail);
+            }
+        }
     }
 }

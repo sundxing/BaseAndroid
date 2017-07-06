@@ -275,6 +275,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
 
     private void dismiss() {
         try {
+            mRootView.setSystemUiVisibility(0);
             windowManager.removeView(mRootView);
         } catch (Exception e) {
             e.printStackTrace();
