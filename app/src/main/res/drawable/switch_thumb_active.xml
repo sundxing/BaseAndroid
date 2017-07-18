@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+
+    <!-- 高度40 -->
+    <size android:height="20dp" android:width="20dp"/>
+    <!-- 圆角弧度 20 -->
+    <corners android:radius="200dp"/>
+
+    <!-- 变化率 -->
+    <gradient
+        android:endColor="#448aff"
+        android:startColor="#347aff" />
+    <padding android:bottom="4dp" android:left="4dp" android:right="4dp" android:top="4dp"/>
+
+</shape>

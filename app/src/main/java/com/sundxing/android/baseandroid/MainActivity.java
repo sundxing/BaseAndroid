@@ -1,11 +1,15 @@
 package com.sundxing.android.baseandroid;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.sundxing.android.baseandroid.anim.NoDrawCallActivity;
@@ -29,6 +33,34 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, getBaseContext().toString());
 
         sendBroadcast(new Intent("com.sundxing.android.baseandroid.START_RECEIVER"));
+
+        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.thumb_orig);
+
+        testDrawableEffective();
+    }
+
+    /**
+     * {@link ImageView#setImageDrawable(Drawable)} is much lighter than {@link ImageView#setImageResource(int)}
+     */
+    private void testDrawableEffective() {
+        long start = 0;
+
+        ImageView imageView = (ImageView) findViewById(R.id.image);
+        ImageView imageView2 = (ImageView) findViewById(R.id.image2);
+
+        start = System.currentTimeMillis();
+        for (int i = 0 ; i < 5000;i ++) {
+            imageView.setImageDrawable(null);
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        }
+        Log.d("SUNDXING","setImageDrawable consume : " + (System.currentTimeMillis() - start));
+
+        start = System.currentTimeMillis();
+        for (int i = 0 ; i < 5000;i ++) {
+            imageView2.setImageResource(R.mipmap.ic_launcher);
+        }
+        Log.d("SUNDXING","setImageResource consume : " + (System.currentTimeMillis() - start));
+
     }
 
     @Override
