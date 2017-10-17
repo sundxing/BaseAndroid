@@ -1,12 +1,19 @@
 package com.sundxing.android.baseandroid;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +23,7 @@ import com.sundxing.android.baseandroid.anim.NoDrawCallActivity;
 import com.sundxing.android.baseandroid.drawable.VectorTestActivity;
 import com.sundxing.android.baseandroid.jump.ShowPopWindowActivity;
 import com.sundxing.android.baseandroid.permisson.PermissionCheckActivity;
+import com.sundxing.android.baseandroid.service.DJobService;
 import com.sundxing.android.baseandroid.view.FontMetricActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
     private boolean toogleDraw;
 
+    private Hi mHi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +41,41 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, getApplicationContext().toString());
         Log.d(TAG, getBaseContext().toString());
 
-        sendBroadcast(new Intent("com.sundxing.android.baseandroid.START_RECEIVER"));
+        Intent intent = new Intent("com.sundxing.android.baseandroid.START_RECEIVER");
+        sendBroadcast(intent, getString(R.string.app_name));
 
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.thumb_orig);
 
         testDrawableEffective();
+
+        testJobService();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void testJobService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            DJobService.startJobService(this);
+        }
+
+        DJobService.startJobServiceTrigger(this);
+    }
+
+    public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;
+
+    @Override
+    public void onAttachedToWindow() {
+        this.getWindow().addFlags(FLAG_HOMEKEY_DISPATCHED);
+
+        super.onAttachedToWindow();
+    }
+
+    private void startAlarmWork() {
+        ComponentName componentName = new ComponentName("im.mixbox.magnet", "im.mixbox.magnet.ui.SplashActivity");
+        Intent intent = new Intent();
+        intent.setComponent(componentName);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager  = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 5000, DateUtils.DAY_IN_MILLIS, pendingIntent);
     }
 
     /**
@@ -49,14 +88,14 @@ public class MainActivity extends AppCompatActivity {
         ImageView imageView2 = (ImageView) findViewById(R.id.image2);
 
         start = System.currentTimeMillis();
-        for (int i = 0 ; i < 5000;i ++) {
+        for (int i = 0 ; i < 50;i ++) {
             imageView.setImageDrawable(null);
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
         }
         Log.d("SUNDXING","setImageDrawable consume : " + (System.currentTimeMillis() - start));
 
         start = System.currentTimeMillis();
-        for (int i = 0 ; i < 5000;i ++) {
+        for (int i = 0 ; i < 50;i ++) {
             imageView2.setImageResource(R.mipmap.ic_launcher);
         }
         Log.d("SUNDXING","setImageResource consume : " + (System.currentTimeMillis() - start));
@@ -100,5 +139,9 @@ public class MainActivity extends AppCompatActivity {
         }
         toogleDraw = !toogleDraw;
         startActivity(intent);
+    }
+
+    enum  Hi {
+        A, B, C
     }
 }

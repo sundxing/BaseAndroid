@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -73,13 +75,14 @@ public class PermissionCheckActivity extends AppCompatActivity {
         sWindowViewFlag.put("FLAG_NOT_FOCUSABLE", WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         sWindowViewFlag.put("FLAG_NOT_TOUCH_MODAL", WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         sWindowViewFlag.put("FLAG_NOT_TOUCHABLE", WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        sWindowViewFlag.put("FLAG_WATCH_OUTSIDE_TOUCH", WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         sWindowViewFlag.put("FLAG_ALT_FOCUSABLE_IM", WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
 
     }
 
     private int seletedColorIndex;
-
+    private Handler mHandler = new Handler();
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -90,7 +93,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.tv_perm_overlay);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
-        mRootView = new LinearLayout(this);
+        mRootView = new FloatingWindowView(this);
         mRootView.setOrientation(LinearLayout.VERTICAL);
 
         viewFlags = (TextView)findViewById(R.id.view_flags);
@@ -241,7 +244,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.flags |= getWindowFlags();
         layoutParams.gravity = Gravity.CENTER;
-        mRootView.postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 dismiss();
@@ -249,6 +252,16 @@ public class PermissionCheckActivity extends AppCompatActivity {
         }, 10000);
         int uiFlag = getViewFlags();
         mRootView.setSystemUiVisibility(uiFlag);
+        mRootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.d("SUNDXING", "KEYCODE:" + keyCode);
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dismiss();
+                }
+                return false;
+            }
+        });
         windowManager.addView(mRootView, layoutParams);
 
     }
@@ -275,6 +288,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
 
     private void dismiss() {
         try {
+            mHandler.removeCallbacksAndMessages(null);
             mRootView.setSystemUiVisibility(0);
             windowManager.removeView(mRootView);
         } catch (Exception e) {
