@@ -22,6 +22,8 @@
         <activity android:name=".permisson.PermissionCheckActivity"/>
         <activity android:name=".view.FontMetricActivity"/>
         <activity android:name=".anim.NoDrawCallActivity" />
+        <activity android:name=".ScreenSizeActivity"/>
+
         <receiver android:name=".receiver.ScureInnerReceiver"
             android:process=":test"
             android:exported="false">

@@ -5,18 +5,27 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.PixelFormat;
+import android.graphics.SurfaceTexture;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.RequiresApi;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sundxing.android.baseandroid.anim.NoDrawCallActivity;
@@ -45,19 +54,25 @@ public class MainActivity extends AppCompatActivity {
         sendBroadcast(intent, getString(R.string.app_name));
 
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.thumb_orig);
-
+        testJobService();
         testDrawableEffective();
 
-        testJobService();
+        final TextView textView  = (TextView) findViewById(R.id.single_text);
+        textView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText("很好很傲\n,很傲很傲很傲河,\n岸哦哦哦哦哦哦哦哦的，可靠的撒娇发好房，打机开关卡戴珊公交卡\ndddddddddddd.");
+            }
+        }, 300);
+
+        startActivity(new Intent(this, ScreenSizeActivity.class));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void testJobService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             DJobService.startJobService(this);
         }
 
-        DJobService.startJobServiceTrigger(this);
     }
 
     public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;
@@ -141,6 +156,93 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void showVideoWindow(View view) {
+        final WindowManager wm = (WindowManager) getApplicationContext().getSystemService(WINDOW_SERVICE);
+        final TextureView textureView = new TextureView(getApplicationContext());
+        textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                Log.d("SURFACE", "available");
+            }
+
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+            }
+
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                Log.d("SURFACE", "destroy");
+                return false;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+            }
+        });
+        final SurfaceView surfaceView = new SurfaceView(getApplicationContext());
+        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                Log.d("SURFACE", "Surface create");
+
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                Log.d("SURFACE", "Surface destroy");
+            }
+        });
+
+//        FrameLayout layout = new FrameLayout(this);
+//        layout.addView(textureView);
+        final View targetView = textureView;
+        wm.addView(targetView, getLayoutParams());
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                wm.removeViewImmediate(targetView);
+            }
+        }, 5000);
+    }
+
+    public WindowManager.LayoutParams getLayoutParams() {
+        int type;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            type = WindowManager.LayoutParams.TYPE_TOAST;
+
+        } else {
+            type = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+
+        if (Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this)) {
+            type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        }
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.type = type;
+        lp.format = PixelFormat.RGBA_8888;
+        lp.flags = WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+        }
+
+        lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+        return lp;
+    }
     enum  Hi {
         A, B, C
     }

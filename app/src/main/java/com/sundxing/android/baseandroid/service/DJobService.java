@@ -19,6 +19,7 @@ import android.util.Log;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class DJobService extends JobService {
+    private static int periodicTime = 1;
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d("DJobService", "start job");
@@ -34,10 +35,14 @@ public class DJobService extends JobService {
     }
 
     public static void startJobService (Context context) {
-
+        periodicTime++;
         JobScheduler scheduler = (JobScheduler) context.getApplicationContext().getSystemService(Context.JOB_SCHEDULER_SERVICE);
         JobInfo.Builder builder = new JobInfo.Builder(3, new ComponentName(context, DJobService.class));
-        builder.setPeriodic(60 * 1000);
+        if (periodicTime > 3) {
+            periodicTime = 1000;
+        }
+        builder.setPeriodic(periodicTime * 1000);
+//        builder.setMinimumLatency(periodicTime * 1000);
 
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
         int result = scheduler.schedule(builder.build());

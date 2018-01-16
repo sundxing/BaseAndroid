@@ -45,6 +45,11 @@
             android:layout_height="wrap_content"
             android:text="Aniamtor No Draw"
             android:onClick="startNoDrawTest"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="悬浮窗视频"
+            android:onClick="showVideoWindow"/>
 
         <com.sundxing.android.baseandroid.test.DemoView
             android:layout_width="wrap_content"
@@ -64,6 +69,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
+        <TextView
+            android:id="@+id/single_text"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:text="ss"/>
         <ImageView
             android:id="@+id/image"
             android:layout_width="60dp"
