@@ -2,6 +2,7 @@ package com.sundxing.android.baseandroid.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -35,6 +36,16 @@ public class FontMetricActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            String testName = extras.getString("test");
+            Log.d("TEST", "got extra name = " + testName);
+        } else {
+            Log.d("TEST", "no extra");
+        }
+
         setContentView(R.layout.activity_font_metrics);
 
         myFontMetricsView = (FontMetricsView) findViewById(R.id.viewWindow);

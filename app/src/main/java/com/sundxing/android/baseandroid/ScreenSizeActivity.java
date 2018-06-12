@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class ScreenSizeActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.layout_screen);
         this.mScreenSizeWidth = (TextView) findViewById(R.id.screen_size_width);
         this.mScreenSizeHeight = (TextView) findViewById(R.id.screen_size_height);

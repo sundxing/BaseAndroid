@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.Drawable;
@@ -35,6 +37,10 @@ import com.sundxing.android.baseandroid.permisson.PermissionCheckActivity;
 import com.sundxing.android.baseandroid.service.DJobService;
 import com.sundxing.android.baseandroid.view.FontMetricActivity;
 
+/**
+ *
+ * TODO  测试 View.postDelay， View.anim 是否自动取消，
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -65,7 +71,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 300);
 
-        startActivity(new Intent(this, ScreenSizeActivity.class));
+
+        try {
+            // Empty Receiver has registered successfully.
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_RECEIVERS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void testJobService() {
@@ -137,7 +149,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startFontMetrics(View view) {
-        startActivity(new Intent(this, FontMetricActivity.class));
+        Intent intent = new Intent(this, FontMetricActivity.class);
+        intent.putExtra("test", "New version has extra name 111");
+        startActivity(intent);
     }
 
     public void startNoDrawTest(View view) {

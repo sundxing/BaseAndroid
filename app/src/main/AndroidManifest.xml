@@ -20,7 +20,9 @@
         <activity android:name=".jump.ShowPopWindowActivity" android:process=":new"/>
         <activity android:name=".drawable.VectorTestActivity" />
         <activity android:name=".permisson.PermissionCheckActivity"/>
-        <activity android:name=".view.FontMetricActivity"/>
+        <activity android:name=".view.FontMetricActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity=".hello"/>
         <activity android:name=".anim.NoDrawCallActivity" />
         <activity android:name=".ScreenSizeActivity"/>
 
@@ -58,6 +60,19 @@
 
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.EmptyReceiver"
+            android:exported="true"
+            android:enabled="true">
+
+        </receiver>
+
+        <receiver android:name=".receiver.PackageAddReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_INSTALL"/>
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
     </application>
