@@ -30,7 +30,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:src="@drawable/phone_above" />
-
     </FrameLayout>
     
     <com.sundxing.android.baseandroid.anim.PathAnimView

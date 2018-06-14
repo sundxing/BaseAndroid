@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.sundxing.android.baseandroid.anim.NoDrawCallActivity;
 import com.sundxing.android.baseandroid.drawable.VectorTestActivity;
+import com.sundxing.android.baseandroid.floatwindow.FloatWindow;
 import com.sundxing.android.baseandroid.jump.ShowPopWindowActivity;
 import com.sundxing.android.baseandroid.permisson.PermissionCheckActivity;
 import com.sundxing.android.baseandroid.service.DJobService;
@@ -78,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        final FloatWindow floatWindow = new FloatWindow(this.getApplicationContext());
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                floatWindow.show();
+                mHandler.postDelayed(this,5000);
+            }
+        },4000);
+
     }
 
     private void testJobService() {
