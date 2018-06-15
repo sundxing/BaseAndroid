@@ -85,6 +85,22 @@
             android:id="@+id/image2"
             android:layout_width="60dp"
             android:layout_height="60dp" />
+
+        <!--使用Shape背景可以实现点击阴影的效果， 但是使用自定义图片是不行的-->
+        <TextView
+            android:id="@+id/textViewIcon"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/security_protection_game_issue_play_btn"
+            android:gravity="center_vertical"
+            android:minHeight="32dp"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
 </ScrollView>
