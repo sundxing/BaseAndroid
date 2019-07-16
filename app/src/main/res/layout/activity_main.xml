@@ -101,6 +101,18 @@
             android:textSize="12sp"
             android:textStyle="bold" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:text="镂空图片"
+            android:layout_height="wrap_content"
+            android:onClick="startDigPicture"/>
+
+        <ImageView
+            android:id="@+id/scale_up_view"
+            android:src="@drawable/test_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 </ScrollView>

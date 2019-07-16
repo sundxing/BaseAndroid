@@ -1,6 +1,8 @@
 package com.sundxing.android.baseandroid;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
+import android.app.AppOpsManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +38,15 @@ import android.widget.Toast;
 
 import com.sundxing.android.baseandroid.anim.NoDrawCallActivity;
 import com.sundxing.android.baseandroid.drawable.VectorTestActivity;
-import com.sundxing.android.baseandroid.floatwindow.FloatWindow;
 import com.sundxing.android.baseandroid.jump.ShowPopWindowActivity;
 import com.sundxing.android.baseandroid.permisson.PermissionCheckActivity;
+import com.sundxing.android.baseandroid.sensor.Accelerometer;
 import com.sundxing.android.baseandroid.service.DJobService;
 import com.sundxing.android.baseandroid.view.FontMetricActivity;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  *
@@ -64,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         sendBroadcast(intent, getString(R.string.app_name));
 
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.thumb_orig);
-        testJobService();
         testDrawableEffective();
 
         final TextView textView  = (TextView) findViewById(R.id.single_text);
@@ -83,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final FloatWindow floatWindow = new FloatWindow(this.getApplicationContext());
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                floatWindow.show();
-                mHandler.postDelayed(this,5000);
-            }
-        },4000);
+//        final FloatWindow floatWindow = new FloatWindow(this.getApplicationContext());
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                floatWindow.show();
+//                mHandler.postDelayed(this,5000);
+//            }
+//        },4000);
 
         findViewById(R.id.textViewIcon).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById(R.id.textViewIcon).setOutlineProvider(new ViewOutlineProvider() {
                 @Override
@@ -106,6 +113,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        new Accelerometer(this).register();
+
+        findViewById(R.id.scale_up_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        findViewById(R.id.scale_up_view).setOnTouchListener(new ScaleUpTouchListener());
+//        startActivity(new Intent(this, UpgradeTargetVersionTestActivity.class));
 
     }
 
@@ -117,6 +136,70 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+            checkXiaomiPermission();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    AppOpsManager appOpsManager;
+    Method opMthod;
+    int permAllow;
+    int permAsk;
+    private void checkXiaomiPermission() throws
+            NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+        Log.d("PermissionCheck", " == start ==");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+
+            if (appOpsManager == null) {
+                appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+                opMthod = AppOpsManager.class.getMethod("checkOp", int.class, int.class, String.class);
+                Field mode = AppOpsManager.class.getField("MODE_ALLOWED");
+                Field modeAsk = AppOpsManager.class.getField("MODE_ASK");
+                mode.setAccessible(true);
+                modeAsk.setAccessible(true);
+                permAllow = mode.getInt(appOpsManager);
+                permAsk = modeAsk.getInt(appOpsManager);
+                Log.d("PermissionCheck", "Check filed allow = " + permAllow + ", ask = " + permAsk);
+            }
+
+            checkPerm( "OP_AUTO_START");
+            checkPerm( "OP_READ_CONTACTS");
+            checkPerm( "OP_SHOW_WHEN_LOCKED");
+            checkPerm( "OP_BACKGROUND_START_ACTIVITY");
+            checkPerm("OP_SYSTEM_ALERT_WINDOW");
+
+        }
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void checkPerm(String permName) throws
+            NoSuchFieldException, IllegalAccessException, InvocationTargetException  {
+        if (opMthod != null) {
+            Field filedDefine = AppOpsManager.class.getField(permName);
+            if (filedDefine != null) {
+                filedDefine.setAccessible(true);
+                int valueDefine = filedDefine.getInt(appOpsManager);
+                int checkResult = (int) opMthod.invoke(appOpsManager, valueDefine, Process.myUid(), getPackageName());
+                Log.d("PermissionCheck", permName
+                        + ", Check = " + checkResult
+                        +", Given = " + (checkResult == permAllow));
+            }
+        }
+    }
 
     @Override
     public void onAttachedToWindow() {
@@ -286,7 +369,14 @@ public class MainActivity extends AppCompatActivity {
 
         return lp;
     }
+
+    public void startDigPicture(View view) {
+        startActivity(new Intent(this, DigPictureActivity.class));
+    }
+
     enum  Hi {
         A, B, C
     }
+
+
 }

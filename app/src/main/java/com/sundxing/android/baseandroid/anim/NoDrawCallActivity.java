@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.PathMeasure;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -48,6 +49,12 @@ public class NoDrawCallActivity extends AppCompatActivity {
                 , findViewById(R.id.rotate_cover_back));
         rotationView.startRotate();
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
 
     private static class RotationView {
 

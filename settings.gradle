@@ -1,1 +1,1 @@
-include ':app', ':stringtool'
+include ':app'
